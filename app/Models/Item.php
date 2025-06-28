@@ -24,23 +24,39 @@ class Item
         $this->depth = $depth;
     }
 
-    public function getAmazonPrice(): string {
+    public function getAmazonPrice(): string
+    {
         return $this->amazonPrice;
     }
 
-    public function getWeight(): string {
+    public function getWeight(): string
+    {
         return $this->weight;
     }
 
-    public function getWidth(): string {
+    public function getWidth(): string
+    {
         return $this->width;
     }
 
-    public function getHeight(): string {
+    public function getHeight(): string
+    {
         return $this->height;
     }
 
-    public function getDepth(): string {
+    public function getDepth(): string
+    {
         return $this->depth;
+    }
+
+    public function toJson(): string
+    {
+        return json_encode([
+            'amazonPrice' => $this->amazonPrice,
+            'weight'      => $this->weight,
+            'width'       => $this->width,
+            'height'      => $this->height,
+            'depth'       => $this->depth,
+        ]);
     }
 }

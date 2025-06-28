@@ -3,35 +3,45 @@
 declare(strict_types=1);
 require_once '../vendor/autoload.php';
 
-use App\Actions\V1\CalculateGrossPriceAction;
-use App\Actions\V1\ValidateOrderAction;
-use App\FeeAggregators\V1\SimpleFeeAggregator;
+use App\Actions\V1\GrossPriceCalculateAction;
+use App\Actions\V1\FindCalculatorToApplyAction;
+use App\Actions\V1\OrderValidateAction;
+use App\Configs\Config;
 use App\Models\Order;
 use App\Models\Item;
 
 try {
 
     $order = new Order([
-        new Item('10.50', '2.5', '10', '5', '3'),
+        new Item('10.513', '2.5', '10', '5', '3'),
         new Item('15.75', '1.8', '8', '4', '2'),
         new Item('15.75', '1.8', '8', '4', '2'),
     ]);
 
-    $validateAction = new ValidateOrderAction();
-    [$isValid, $errors] = $validateAction->execute($order);
+    $orderValidateAction = new OrderValidateAction();
+    [$isValid, $errors] = $orderValidateAction->execute($order);
     if (!$isValid) {
         $errorMessages = implode(', ', $errors);
-        echo "Order validation failed: {$errorMessages} \n";
+        printString("Order validation failed: {$errorMessages}");
         return;
     }
+     
+    $config         = Config::get();
+    $findCalAction  = new FindCalculatorToApplyAction();
+    $feeCalculator  = $findCalAction->execute($config);
+    $calPriceAction = new GrossPriceCalculateAction($feeCalculator);
+    $grossPrice     = $calPriceAction->execute($order);
     
-    $feeAggregator       = new SimpleFeeAggregator('2.0', '2.0');
-    $feeCalculator       = $feeAggregator->getAggregatedCalculator();
-    $calGrossPriceAction = new CalculateGrossPriceAction($feeCalculator);
-    $grossPrice          = $calGrossPriceAction->execute($order);
-    
-    echo "Gross Price: $" . $grossPrice . "\n";
+    foreach ($order->getItems() as $idx => $item) {
+        printString("Item {$idx}: {$item->toJson()}");
+    }
+    printString("Gross Price: {$grossPrice}");
     
 } catch (Exception $e) {
-    echo "Error: " . $e->getMessage() . "\n";
+    printString("Error: {$e->getMessage()}");
+}
+
+function printString(string $string): void
+{
+    echo nl2br($string . PHP_EOL);
 }

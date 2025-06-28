@@ -5,7 +5,7 @@ namespace App\Actions\V1;
 use App\Models\Order;
 use App\FeeCalculators\FeeCalculator;
 
-class CalculateGrossPriceAction
+class GrossPriceCalculateAction
 {
     private FeeCalculator $feeCalculator;
 
