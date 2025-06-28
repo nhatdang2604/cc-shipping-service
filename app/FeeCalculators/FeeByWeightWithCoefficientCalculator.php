@@ -16,7 +16,7 @@ class FeeByWeightWithCoefficientCalculator implements FeeCalculator
     }
 
     /** @Override **/
-    public function id(): string
+    public function getId(): string
     {
         return self::ID;
     }

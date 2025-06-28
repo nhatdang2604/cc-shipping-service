@@ -11,7 +11,7 @@ class Config
     public static function get(): array
     {
         return [
-            'bc_scale'   => 6, // precision
+            'bc_scale'   => 7, // precision
             'fee_config' => [
                 [
                     'type'   => FeeWithMaxCalculator::ID,

@@ -17,7 +17,7 @@ class FeeWithMaxCalculator implements FeeCalculator
     }
 
     /** @Override **/
-    public function id(): string
+    public function getId(): string
     {
         return self::ID;
     }
@@ -25,6 +25,10 @@ class FeeWithMaxCalculator implements FeeCalculator
     /** @Override **/
     public function calculate(Item $item): string
     {
+        if (empty($this->calculators)) {
+            throw new \InvalidArgumentException('No fees provided');
+        }
+
         $fees = array_map(function ($calculator) use ($item) {
             return $calculator->calculate($item);
         }, $this->calculators);

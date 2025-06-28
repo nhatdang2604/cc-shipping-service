@@ -29,9 +29,9 @@ class OrderValidateAction
                 $errors[] = $error;
             }
 
-            [$isValid, $error] = $this->validateItemDimension($item);
+            [$isValid, $dimensionErrors] = $this->validateItemDimension($item);
             if (!$isValid) {
-                $errors[] = $error;
+                $errors = array_merge($errors, $dimensionErrors);
             }
         }
 
@@ -99,27 +99,29 @@ class OrderValidateAction
     private function validateItemDimension(Item $item): array
     {
         $isValid = true;
-        
+        $errors  = [];
+
         $toValidates = [
-            'width'  => $item->getWidth(),
-            'height' => $item->getHeight(),
-            'depth'  => $item->getDepth(),
+            'Width'  => $item->getWidth(),
+            'Height' => $item->getHeight(),
+            'Depth'  => $item->getDepth(),
         ];
 
         foreach ($toValidates as $key => $value) {
             $isValid = $this->validateNumeric($value);
+            
             if (!$isValid) {
-                return [$isValid, "{$key} of item must be a number"];
+                $errors[] = "{$key} of item must be a number";
+                continue;
+            }
+
+            $isValid = $this->validateLargerThanZero($value);
+            if (!$isValid) {
+                $errors[] = "{$key} of item must be greater than 0";
+                continue;
             }
         }
 
-        foreach ($toValidates as $key => $value) {
-            $isValid = $this->validateLargerThanZero($value);
-            if (!$isValid) {
-                return [$isValid, "{$key} of item must be greater than 0"];
-            }
-        }
-        
-        return [$isValid, null];
+        return [$isValid, $errors];
     }
 }
