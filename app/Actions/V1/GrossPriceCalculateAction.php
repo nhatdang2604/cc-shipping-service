@@ -9,7 +9,12 @@ class GrossPriceCalculateAction
 {
     private FeeCalculator $feeCalculator;
 
-    public function __construct(FeeCalculator $feeCalculator)
+    public function __construct()
+    {
+        // Do nothing
+    }
+
+    public function setFeeCalculator(FeeCalculator $feeCalculator)
     {
         $this->feeCalculator = $feeCalculator;
     }
