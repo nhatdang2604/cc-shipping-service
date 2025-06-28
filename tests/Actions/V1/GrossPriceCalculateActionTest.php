@@ -30,13 +30,14 @@ class GrossPriceCalculateActionTest extends TestCase
             new Item('5', '5', '5', '5', '5'), // 5 + 11*5*5*5 = 1375
         ]);
 
-        $action = new GrossPriceCalculateAction(
-            new FeeWithMaxCalculator([
-                new FeeByWeightWithCoefficientCalculator('11'),
-                new FeeByDimensionWithCoefficientCalculator('11'),
-            ])
-        );
-
+        // Set fee calculator
+        $feeCalculator = new FeeWithMaxCalculator([
+            new FeeByWeightWithCoefficientCalculator('11'),
+            new FeeByDimensionWithCoefficientCalculator('11'),
+        ]);
+        $action = new GrossPriceCalculateAction();
+        $action->setFeeCalculator($feeCalculator);
+        
         $expected = '2490';
         $actual   = $action->execute($order);
         $isEqual  = bccomp($expected, $actual) === 0;
@@ -52,12 +53,13 @@ class GrossPriceCalculateActionTest extends TestCase
         }
         $order = new Order($items);
 
-        $action = new GrossPriceCalculateAction(
-            new FeeWithMaxCalculator([
-                new FeeByWeightWithCoefficientCalculator('11'),
-                new FeeByDimensionWithCoefficientCalculator('11'),
-            ])
-        );
+        // Set fee calculator
+        $feeCalculator = new FeeWithMaxCalculator([
+            new FeeByWeightWithCoefficientCalculator('11'),
+            new FeeByDimensionWithCoefficientCalculator('11'),
+        ]);
+        $action = new GrossPriceCalculateAction();
+        $action->setFeeCalculator($feeCalculator);
             
         $expected = '150030000';
         $actual   = $action->execute($order);
@@ -74,12 +76,13 @@ class GrossPriceCalculateActionTest extends TestCase
         }
         $order = new Order($items);
 
-        $action = new GrossPriceCalculateAction(
-            new FeeWithMaxCalculator([
-                new FeeByWeightWithCoefficientCalculator('999999999'),       // 1 billion
-                new FeeByDimensionWithCoefficientCalculator('999999999'), // 1 billion
-            ])
-        );
+        // Set fee calculator
+        $feeCalculator = new FeeWithMaxCalculator([
+            new FeeByWeightWithCoefficientCalculator('999999999'),       // 1 billion
+            new FeeByDimensionWithCoefficientCalculator('999999999'), // 1 billion
+        ]);
+        $action = new GrossPriceCalculateAction();
+        $action->setFeeCalculator($feeCalculator);
         
         $expected = '5000050000000000000';
         $actual   = $action->execute($order);
@@ -96,9 +99,12 @@ class GrossPriceCalculateActionTest extends TestCase
         }
         $order = new Order($items);
 
-        $action = new GrossPriceCalculateAction(
+        // Set fee calculator
+        $feeCalculator = new FeeWithMaxCalculator([
             new FeeByWeightWithCoefficientCalculator('999999999'),       // 1 billion
-        );
+        ]);
+        $action = new GrossPriceCalculateAction();
+        $action->setFeeCalculator($feeCalculator);
         
         $expected = '5000050000000000000';
         $actual   = $action->execute($order);
@@ -116,9 +122,12 @@ class GrossPriceCalculateActionTest extends TestCase
             new Item('5', '5', '5', '5', '5'), // 5 + 11*5*5*5 = 1375
         ]);
 
-        $action = new GrossPriceCalculateAction(
+        // Set fee calculator
+        $feeCalculator = new FeeWithMaxCalculator([
             new FeeByDimensionWithCoefficientCalculator('11'),
-        );
+        ]);
+        $action = new GrossPriceCalculateAction();
+        $action->setFeeCalculator($feeCalculator);
 
         $expected = '2490';
         $actual   = $action->execute($order);
