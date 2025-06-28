@@ -21,7 +21,7 @@ There are the result render of the gross price
 
 # How to config the code ?
 
-- To change the input: please browse app/public/index.php to change the $order variable
+- To change the input: please browse to 'public/index.php' to change the $order variable
 - To config the fee parameter (such as weight coefficient, dimension coefficient,...): please browse to app/Configs/Config.php
 
 
